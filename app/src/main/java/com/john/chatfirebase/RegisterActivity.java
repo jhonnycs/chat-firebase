@@ -72,7 +72,7 @@ public class RegisterActivity extends AppCompatActivity {
         });
     }
 
-    ActivityResultLauncher<Intent> launchSomeActivity = registerForActivityResult(
+    ActivityResultLauncher<Intent> launchGalleryActivity = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
@@ -98,7 +98,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         //intent.setAction(Intent.ACTION_GET_CONTENT);
 
-        launchSomeActivity.launch(intent);
+        launchGalleryActivity.launch(intent);
     }
 
     private void createUser() {

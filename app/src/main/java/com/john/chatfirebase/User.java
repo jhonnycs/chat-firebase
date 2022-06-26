@@ -3,7 +3,9 @@ package com.john.chatfirebase;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+
 public class User implements Parcelable {
+
     private String uuid;
     private String username;
     private String profileUrl;
@@ -11,7 +13,6 @@ public class User implements Parcelable {
     private boolean online;
 
     public User() {
-
     }
 
     public User(String uuid, String username, String profileUrl) {
@@ -66,11 +67,11 @@ public class User implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(uuid);
-        parcel.writeString(username);
-        parcel.writeString(profileUrl);
-        parcel.writeString(token);
-        parcel.writeInt(online ? 1 : 0);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uuid);
+        dest.writeString(username);
+        dest.writeString(profileUrl);
+        dest.writeString(token);
+        dest.writeInt(online ? 1 : 0);
     }
 }

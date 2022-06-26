@@ -7,9 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
-import android.util.Log;
-
-import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,8 +20,8 @@ import java.util.Map;
 public class FCMService extends FirebaseMessagingService {
 
     @Override
-    public void onMessageReceived(@NonNull RemoteMessage message) {
-        Map<String, String> data = message.getData();
+    public void onMessageReceived(RemoteMessage remoteMessage) {
+        final Map<String, String> data = remoteMessage.getData();
 
         if (data == null || data.get("sender") == null) return;
 
@@ -39,6 +36,7 @@ public class FCMService extends FirebaseMessagingService {
                         User sender = documentSnapshot.toObject(User.class);
 
                         ii.putExtra("user", sender);
+
                         PendingIntent pIntent = PendingIntent.getActivity(
                                 getApplicationContext(), 0, ii, 0);
 
@@ -48,8 +46,9 @@ public class FCMService extends FirebaseMessagingService {
                         String notificationChannelId = "my_channel_id_01";
 
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            NotificationChannel notificationChannel = new NotificationChannel(notificationChannelId, "My Notifications",
-                                    NotificationManager.IMPORTANCE_DEFAULT);
+                            NotificationChannel notificationChannel =
+                                    new NotificationChannel(notificationChannelId, "My Notifications",
+                                            NotificationManager.IMPORTANCE_DEFAULT);
 
                             notificationChannel.setDescription("Channel description");
                             notificationChannel.enableLights(true);
@@ -57,14 +56,15 @@ public class FCMService extends FirebaseMessagingService {
 
                             notificationManager.createNotificationChannel(notificationChannel);
                         }
+
                         NotificationCompat.Builder builder =
                                 new NotificationCompat.Builder(getApplicationContext(), notificationChannelId);
 
-                        builder.setAutoCancel(true);
-                        builder.setSmallIcon(R.mipmap.ic_launcher);
-                        builder.setContentTitle(data.get("title"));
-                        builder.setContentText(data.get("body"));
-                        builder.setContentIntent(pIntent);
+                        builder.setAutoCancel(true)
+                                .setSmallIcon(R.mipmap.ic_launcher)
+                                .setContentTitle(data.get("title"))
+                                .setContentText(data.get("body"))
+                                .setContentIntent(pIntent);
 
                         notificationManager.notify(1, builder.build());
                     }

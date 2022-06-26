@@ -68,25 +68,26 @@ public class MessagesActivity extends AppCompatActivity {
 
     private void fetchLastMessage() {
         String uid = FirebaseAuth.getInstance().getUid();
+        if (uid != null) {
+            FirebaseFirestore.getInstance().collection("/last-messages")
+                    .document(uid)
+                    .collection("contacts")
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+                            List<DocumentChange> documentChanges = value.getDocumentChanges();
 
-        FirebaseFirestore.getInstance().collection("/last-messages")
-                .document(uid)
-                .collection("contacts")
-                .addSnapshotListener(new EventListener<QuerySnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
-                        List<DocumentChange> documentChanges = value.getDocumentChanges();
-
-                        if (documentChanges != null) {
-                            for (DocumentChange doc: documentChanges) {
-                                if (doc.getType() == DocumentChange.Type.ADDED) {
-                                    Contact contact = doc.getDocument().toObject(Contact.class);
-                                    adapter.add(new ContactItem(contact));
+                            if (documentChanges != null) {
+                                for (DocumentChange doc: documentChanges) {
+                                    if (doc.getType() == DocumentChange.Type.ADDED) {
+                                        Contact contact = doc.getDocument().toObject(Contact.class);
+                                        adapter.add(new ContactItem(contact));
+                                    }
                                 }
                             }
                         }
-                    }
-                });
+                    });
+        }
     }
 
     private void verifyAuthentication() {

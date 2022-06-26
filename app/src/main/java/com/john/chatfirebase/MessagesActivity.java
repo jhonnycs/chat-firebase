@@ -25,6 +25,7 @@ import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.GroupieViewHolder;
 import com.xwray.groupie.Item;
+import com.xwray.groupie.OnItemClickListener;
 
 import java.util.List;
 
@@ -80,7 +81,6 @@ public class MessagesActivity extends AppCompatActivity {
                             for (DocumentChange doc: documentChanges) {
                                 if (doc.getType() == DocumentChange.Type.ADDED) {
                                     Contact contact = doc.getDocument().toObject(Contact.class);
-
                                     adapter.add(new ContactItem(contact));
                                 }
                             }
@@ -127,7 +127,6 @@ public class MessagesActivity extends AppCompatActivity {
             this.contact = contact;
         }
 
-
         @Override
         public void bind(@NonNull GroupieViewHolder viewHolder, int position) {
             TextView username = viewHolder.itemView.findViewById(R.id.textView);
@@ -140,6 +139,7 @@ public class MessagesActivity extends AppCompatActivity {
                     .load(contact.getPhotoUrl())
                     .into(imgPhoto);
         }
+
 
         @Override
         public int getLayout() {
